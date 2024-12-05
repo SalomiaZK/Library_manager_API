@@ -1,0 +1,228 @@
+openapi: 3.0.0
+info:
+  title: Library Manager
+  description: The API for managing Books
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/HEISALOMIA20/ReviewOpenAPI/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /books:
+    get:
+      tags:
+      - Books
+      description: returns all Books
+      operationId: getAllBooks
+      parameters:
+      - name: releaseDateStart
+        in: query
+        description: When the book you are looking for was released
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+          example: 2024-12-04
+      - name: releaseDateEnd
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+          example: 2024-12-04
+      - name: bookname
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: returns all books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/book'
+  /book:
+    post:
+      tags:
+      - Books
+      summary: Adds a new book
+      operationId: Adding book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/book'
+        required: true
+      responses:
+        "201":
+          description: Book added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/book'
+  /books/{idBook}:
+    put:
+      description: update a book
+      parameters:
+      - name: idBook
+        in: path
+        description: the book id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/book'
+        required: true
+      responses:
+        "200":
+          description: book updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/book'
+        "400":
+          description: error in the request
+    delete:
+      description: delete a book
+      parameters:
+      - name: idBook
+        in: path
+        description: the id of the book
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: book deleted successfully
+        "400":
+          description: error in the request
+  /authors:
+    get:
+      tags:
+      - Authors
+      description: returns all Authors
+      operationId: getAllAuthors
+      parameters:
+      - name: authorName
+        in: query
+        description: What's his/her name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: returns all authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/authors'
+  /author:
+    post:
+      tags:
+      - Authors
+      summary: Adds a new Author
+      operationId: Adding Author
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/author'
+        required: true
+      responses:
+        "201":
+          description: Author added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/author'
+  /authors/{idAuthor}:
+    put:
+      description: update an Author
+      parameters:
+      - name: idAuthor
+        in: path
+        description: the author id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/author'
+        required: true
+      responses:
+        "200":
+          description: author updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/book'
+        "400":
+          description: error in the request
+    delete:
+      description: delete an author
+      parameters:
+      - name: idAuthor
+        in: path
+        description: the id of the author
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: book deleted successfully
+        "400":
+          description: error in the request
+components:
+  schemas:
+    book:
+      type: object
+      properties:
+        IDBook:
+          type: string
+        bookName:
+          type: string
+          description: the title of the book
+        authorName:
+          type: string
+          description: the author of the book
+        releaseDate:
+          type: string
+          description: when the book was out
+        pageNumber:
+          type: integer
+        topic:
+          type: string
+    author:
+      type: object
+      properties:
+        IDAuthor:
+          type: string
+        authorName:
+          type: string
+        sex:
+          type: string
