@@ -1,0 +1,89 @@
+openapi: 3.0.0
+info:
+  title: home-iot-api
+  description: The API for the EatBacon IOT project
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/HEISALOMIA20/CoursesManager/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /courses:
+    get:
+      tags:
+      - Courses
+      description: returns all courses
+      operationId: getAllCourses
+      parameters:
+      - name: CourseDate
+        in: query
+        description: When is the course
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+          example: 2024-12-04
+      - name: courseName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: returns all books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/course'
+    delete:
+      description: delete a course
+      parameters:
+      - name: idCourse
+        in: path
+        description: the id of the course
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: the course was deleted successfully
+        "400":
+          description: error in the request
+components:
+  schemas:
+    group:
+      type: object
+      properties:
+        idGroup:
+          type: string
+        name:
+          type: string
+          description: the name of the group
+        promotion:
+          type: string
+          description: the promotion name
+          enum:
+          - G
+          - H
+          - J
+          - K
+        studentNumber:
+          type: integer
+          description: when the book was out
+    student:
+      type: object
+      properties:
+        reference:
+          type: string
+        sex:
+          type: string
+          enum:
+          - M
+          - F
