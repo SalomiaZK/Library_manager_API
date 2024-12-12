@@ -1,31 +1,21 @@
 openapi: 3.0.0
 info:
-  title: home-iot-api
-  description: The API for the EatBacon IOT project
-  version: 1.0.0
+  title: Student Management
+  description: Title
+  version: 1.0.1
 servers:
-- url: https://virtserver.swaggerhub.com/HEISALOMIA20/CoursesManager/1.0.0
+- url: https://virtserver.swaggerhub.com/HEISALOMIA20/CoursesManager/1.0.1
   description: SwaggerHub API Auto Mocking
 paths:
-  /courses:
+  /Groups:
     get:
       tags:
-      - Courses
-      description: returns all courses
-      operationId: getAllCourses
+      - Group
+      description: returns all groups
       parameters:
-      - name: CourseDate
+      - name: groupId
         in: query
-        description: When is the course
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: date
-          example: 2024-12-04
-      - name: courseName
-        in: query
+        description: the id of the group
         required: false
         style: form
         explode: true
@@ -33,57 +23,178 @@ paths:
           type: string
       responses:
         "200":
-          description: returns all books
+          description: returns all groups
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/course'
-    delete:
-      description: delete a course
+                  $ref: '#/components/schemas/Student'
+    put:
+      summary: update a group
       parameters:
-      - name: idCourse
-        in: path
-        description: the id of the course
+      - name: groupId
+        in: query
         required: true
-        style: simple
-        explode: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+        required: true
+      responses:
+        "200":
+          description: updated successfully
+          content:
+            application/json: {}
+    post:
+      summary: create a new group
+      operationId: createGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+        required: true
+      responses:
+        "200":
+          description: Group created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedGroup'
+        "400":
+          description: erron in the request
+    delete:
+      parameters:
+      - name: groupId
+        in: query
+        required: true
+        style: form
+        explode: true
         schema:
           type: string
       responses:
         "200":
-          description: the course was deleted successfully
+          description: group deleted successully
+        "400":
+          description: error in the request
+  /Student:
+    get:
+      tags:
+      - Student
+      description: returns all students
+      parameters:
+      - name: studentID
+        in: query
+        description: the id of the student
+        required: false
+        style: form
+        explode: true
+      responses:
+        "200":
+          description: returns all students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+    put:
+      summary: update a student
+      parameters:
+      - name: studentId
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+        required: true
+      responses:
+        "200":
+          description: updated successfully
+        application/json: {}
+    post:
+      summary: create a new student
+      operationId: createstudent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+        required: true
+    delete:
+      parameters:
+      - name: studentId
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: student deleted successully
         "400":
           description: error in the request
 components:
   schemas:
-    group:
+    Student:
       type: object
       properties:
-        idGroup:
-          type: string
         name:
-          type: string
-          description: the name of the group
-        promotion:
-          type: string
-          description: the promotion name
-          enum:
-          - G
-          - H
-          - J
-          - K
-        studentNumber:
-          type: integer
-          description: when the book was out
-    student:
-      type: object
-      properties:
-        reference:
           type: string
         sex:
           type: string
           enum:
           - M
           - F
+        birthdate:
+          type: string
+          format: date
+        reference:
+          type: string
+    CreatedStudent:
+      type: object
+      properties:
+        idStudent:
+          type: string
+        allOf:
+          $ref: '#/components/schemas/Student'
+    Group:
+      type: object
+      properties:
+        GroupName:
+          type: string
+        groupYear:
+          type: integer
+        promotion:
+          type: string
+          enum:
+          - G
+          - H
+          - J
+          - K
+        studentNumeber:
+          type: integer
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/Student'
+    CreatedGroup:
+      type: object
+      properties:
+        IDGroup:
+          type: string
+        allOf:
+          $ref: '#/components/schemas/Group'
